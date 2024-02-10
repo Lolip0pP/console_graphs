@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <string.h>
+#define M_PI
 
 typedef struct stack_s stack;
 
 struct stack_s{               //структура стека
     char data;
+    double number;
     stack *next;
 };
 
@@ -27,22 +29,35 @@ stack *init(char data) {                    // инициация стека
 }
 
 
-stack *push(stack *head, stack *node){ // добавление операции в стек
-    if (node)
-        node->next = head;
-    else
-        node = head;
-    return node;
+// stack *push(stack *head, stack *node){ // добавление операции в стек
+//     if (node)
+//         node->next = head;
+//     else
+//         node = head;
+//     return node;
+// };
+
+stack *push(stack *HEAD, char a, double new_number) {
+    struct st *PTR;
+    if ((PTR = malloc(sizeof(struct st))) == NULL) {
+        puts("Sorry, not today:(");
+        exit(-1);
+    }
+    PTR->c = a;
+    PTR->number=new_number;
+    PTR->next = HEAD;
+    return PTR;
 };
 
-stack *delete(stack *head, char *ch){ // удаление элемента из стека
+int delete(stack *head){ // удаление элемента из стека
+    char ch;
     stack *stack = head->next;
     if (head == NULL)
-        *ch = '\0';
+        ch = '\0';
     else
-        *ch = head->data;
+        ch = head->data;
     free(head);
-    return stack;
+    return ch;
 }
 
 void free_stack(stack *head) {  // функция очистки стека
@@ -50,6 +65,11 @@ void free_stack(stack *head) {  // функция очистки стека
         tmp = head->next;
         free(head);
     }
+}
+
+stack pop(stack *head){
+
+
 }
 
 // int priority_calc(char symbol){
@@ -80,10 +100,48 @@ void free_stack(stack *head) {  // функция очистки стека
 // }
 
 
-// int calculate()
-// array[80];
-// for( i=0; i<80;i++){
-// int x=i*PI/20;
-// array[i]= ;  
-// }
 
+char output[80];  // где-то там далеко живет аутпут
+
+int calculate(*output){
+stack *head;
+int length = strlen(output);
+int x;
+double m = 0;
+double result;
+for (int x = 0; x<4*M_PI; x+=x*M_PI/20){
+    for (int i=0;i<length;i++){
+       if (sscanf(output, "%lf",&m)){
+        push(head," ",m);
+       }
+       if (output[i] == '+'){
+        result = delete(head);
+        result += delete(head);
+       }else if(output[i] == '-'){
+        result = delete(head);
+        result -= delete(head);
+       }else if(output[i] == '*'){
+        result = delete(head);
+        result *= delete(head);
+       }else if(output[i] == '/'){
+        result = delete(head);
+        result /= delete(head);
+       }else if(output[i] == '!'){
+        result = sin(delete(head));
+       }else if(output[i] == '?'){
+        result = cos(delete(head));
+       }else if(output[i] == ':'){
+        result = tan(delete(head));
+       }else if(output[i] == ';'){
+        result = ctg(delete(head));
+       }else if(output[i] == '&'){
+        result = ln(delete(head));
+       }else if(output[i] == '@'){
+        result = sqrt(delete(head));
+       }else if(output[i] == '~'){
+        result = -(delete(head));
+       }
+
+    }
+}
+}
