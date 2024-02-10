@@ -2,82 +2,82 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct st {
+struct stack {
     char c;
-    struct st *next;
+    struct stack *next;
 };
 
-struct st *push(struct st *, char);
-char delete_symbol(struct st **);
+struct stack *push(struct stack *, char);
+char delete_symbol(struct stack **);
 int operation_priority(char);
 
 int main() {
     //'+', '-', '*', '/', '!', '?', ':', ';', '@', '&'
-    struct st *OPERS = NULL;
+    struct stack *operators = NULL;
     char a[80], outstring[80];
     int i = 0, j = 0;
 
+    printf("Запускаем модуль? y/n ");
     while (getchar() != 'n') {
         fflush(stdin);
         scanf("%s", a);
-        
+
         while (a[i] != '\0' && a[i] != '=') {
             if (a[i] == ')') {
-                while ((OPERS->c) != '(')
-                    outstring[j++] = delete_symbol(&OPERS);
-                delete_symbol(&OPERS);
-            } else if (a[i] == 'x' || (a[i] >='0' && a[i]<='9'))
+                while ((operators->c) != '(') outstring[j++] = delete_symbol(&operators);
+                delete_symbol(&operators);
+            } else if (a[i] == 'x' || (a[i] >= '0' && a[i] <= '9'))
                 outstring[j++] = a[i];
             else if (a[i] == '(')
-                OPERS = push(OPERS, '(');
+                operators = push(operators, '(');
             else if (a[i] == '+' || a[i] == '-' || a[i] == '/' || a[i] == '*' || a[i] == '!' || a[i] == '?' ||
                      a[i] == ':' || a[i] == ';' || a[i] == '@' || a[i] == '&') {
-                if (OPERS == NULL)
-                    OPERS = push(OPERS, a[i]);
+                if (operators == NULL)
+                    operators = push(operators, a[i]);
                 else {
-                    if (operation_priority(OPERS->c) < operation_priority(a[i]))
-                        OPERS = push(OPERS, a[i]);
+                    if (operation_priority(operators->c) < operation_priority(a[i]))
+                        operators = push(operators, a[i]);
                     else {
-                        while ((OPERS != NULL) && (operation_priority(OPERS->c) >= operation_priority(a[i])))
-                            outstring[j++] = delete_symbol(&OPERS);
-                        OPERS = push(OPERS, a[i]);
+                        while ((operators != NULL) &&
+                               (operation_priority(operators->c) >= operation_priority(a[i])))
+                            outstring[j++] = delete_symbol(&operators);
+                        operators = push(operators, a[i]);
                     }
                 }
             }
             i++;
         }
-        
-        while (OPERS != NULL)
-            outstring[j++] = delete_symbol(&OPERS);
+
+        while (operators != NULL) outstring[j++] = delete_symbol(&operators);
         outstring[j] = '\0';
         printf("\n%s\n", outstring);
         fflush(stdin);
-        printf("\nПовтоpить(y/n)?");
+        printf("\nПовтоpить(y/n)? ");
     }
     return 0;
 }
 
-struct st *push(struct st *HEAD, char a) {
-    struct st *PTR;
-    if ((PTR = malloc(sizeof(struct st))) == NULL) {
-        puts("Sorry, not today:(");
+struct stack *push(struct stack *head, char a) {
+    struct stack *p;
+    if ((p = malloc(sizeof(struct stack))) == NULL) {
+        printf("Sorry, not today:(");
         exit(-1);
     }
-    PTR->c = a;
-    PTR->next = HEAD;
-    return PTR;
+    p->c = a;
+    p->next = head;
+    return p;
 }
 
-char delete_symbol(struct st **HEAD) {
-    struct st *PTR;
+char delete_symbol(struct stack **head) {
+    struct stack *p;
     char a;
-    if (*HEAD == NULL)
+    if (*head == NULL)
         a = '\0';
     else {
-        PTR = *HEAD;
-        a = PTR->c;
-        *HEAD = PTR->next;
-        free(PTR);
+        p = *head;
+        a = p->c;
+        *head = p->next;
+        free(p);
     }
     return a;
 }

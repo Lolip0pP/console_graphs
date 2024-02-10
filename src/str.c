@@ -7,17 +7,20 @@ int norm(char* s);
 int main() {
     char buf[128];
     char s[128];
+    printf("Print infix shit:\n");
     scanf("%s", s);
 
+    if (s[0] == '-') s[0] = '~';
     str_replace(buf, sizeof(buf) - 1, s, "cos", "?");
     str_replace(s, sizeof(s) - 1, buf, "sin", "!");
     str_replace(buf, sizeof(buf) - 1, s, "tan", ":");
     str_replace(s, sizeof(s) - 1, buf, "ctg", ";");
     str_replace(buf, sizeof(buf) - 1, s, "sqrt", "@");
     str_replace(s, sizeof(s) - 1, buf, "ln", "&");
+    str_replace(buf, sizeof(buf) - 1, s, "(-", "(~");
 
     printf("%d\n", norm(s));
-    puts(s);
+    printf("%s", s);
 
     return 0;
 }
