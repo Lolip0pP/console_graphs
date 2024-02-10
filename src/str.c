@@ -51,7 +51,7 @@ char* str_replace(char* hey, int num, const char* str, const char* orig, const c
 
 int norm(char* s) {
     char dict[] = {'+', '-', '*', '/', '!', '?', ':', ';', '@', '&', 'x', '1',
-                   '2', '3', '4', '5', '6', '7', '8', '9', '0', '(', ')'};
+                   '2', '3', '4', '5', '6', '7', '8', '9', '0', '(', ')', '.'};
     int d = 0, count1 = 0, count2 = 0;
     for (int i = 0; i < (int)strlen(s); i++) {
         d = 1;

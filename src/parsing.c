@@ -26,7 +26,7 @@ int main() {
             if (a[i] == ')') {
                 while ((operators->c) != '(') outstring[j++] = delete_symbol(&operators);
                 delete_symbol(&operators);
-            } else if (a[i] == 'x' || (a[i] >= '0' && a[i] <= '9'))
+            } else if (a[i] == 'x' || (a[i] >= '0' && a[i] <= '9') || a[i] == '.')
                 outstring[j++] = a[i];
             else if (a[i] == '(')
                 operators = push(operators, '(');
