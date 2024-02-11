@@ -10,18 +10,18 @@ void parsing(char *input, char *outstring) {
     struct stack *operators = NULL;
 
     while (input[i] != '\0' && input[i] != '=') {
-        //
+        // Обработка разных символов
         if (input[i] == ')') {
             while ((operators->data) != '(') outstring[j++] = delete_symbol(&operators);
             delete_symbol(&operators);
         }
-        //
+        // Числа проходят сразу в выходной массив
         else if (input[i] == 'x' || (input[i] >= '0' && input[i] <= '9') || input[i] == '.')
             outstring[j++] = input[i];
-        //
+
         else if (input[i] == '(')
             operators = push(operators, '(');
-        //
+        // Операции собираются в стек и сортируются по приоритету
         else if (input[i] == '+' || input[i] == '-' || input[i] == '/' || input[i] == '*' ||
                  input[i] == '!' || input[i] == '?' || input[i] == ':' || input[i] == ';' ||
                  input[i] == '@' || input[i] == '&' || input[i] == '~') {

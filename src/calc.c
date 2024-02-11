@@ -13,10 +13,12 @@ void calc(char *outstring, double *values) {
         double x = j * M_PI / (MAX_WIDTH / 4);
         for (int i = 0; i < (int)strlen(outstring); i++) {
             char symbol = outstring[i];
+            // Числа кидаем в стек
             if (symbol >= '0' && symbol <= '9') {
                 push_double(&stack, symbol - '0');
             } else if (symbol == 'x')
                 push_double(&stack, x);
+            // Операции сортируем по приоритету и применяем к стеку чисел
             else if (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/') {
                 double b = pop(&stack);
                 double a = pop(&stack);

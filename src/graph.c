@@ -24,8 +24,8 @@ void graph(double *values) {
 
 void round_array_values(double array[], int size) {
     for (int i = 0; i < size; i++) {
-        double roundedValue = array[i] * 12 + 12;
-        roundedValue = roundf(roundedValue);
-        array[i] = roundedValue;
+        double rounded_value = array[i] * 12 + 12;
+        rounded_value = roundf(rounded_value);
+        array[i] = rounded_value;
     }
 }

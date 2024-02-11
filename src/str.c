@@ -7,6 +7,7 @@ void replace_symbol(char* input) {
     printf("Print infix expression:\n");
     scanf("%100s", input);
 
+    // Подготовка к посимвольному считыванию следующими модулямиы
     if (input[0] == '-') input[0] = '~';
     str_replace(input, "cos", "?");
     str_replace(input, "sin", "!");
@@ -19,29 +20,26 @@ void replace_symbol(char* input) {
 }
 
 void str_replace(char str[], char sub[], char nstr[]) {
-    int strLen, subLen, nstrLen;
+    int str_len = strlen(str), sub_len = strlen(sub), nstr_len = strlen(nstr);
     int i = 0, j, k;
-    strLen = strlen(str);
-    subLen = strlen(sub);
-    nstrLen = strlen(nstr);
 
-    for (i = 0; i < strLen; i++) {
+    for (i = 0; i < str_len; i++) {
         int flag = 0, start = i, end = 0;
         for (j = 0; str[i] == sub[j]; j++, i++)
-            if (j == subLen - 1) flag = 1;
+            if (j == sub_len - 1) flag = 1;
         end = i;
         if (flag == 0)
             i -= j;
         else {
             for (j = start; j < end; j++) {
-                for (k = start; k < strLen; k++) str[k] = str[k + 1];
-                strLen--;
+                for (k = start; k < str_len; k++) str[k] = str[k + 1];
+                str_len--;
                 i--;
             }
-            for (j = start; j < start + nstrLen; j++) {
-                for (k = strLen; k >= j; k--) str[k + 1] = str[k];
+            for (j = start; j < start + nstr_len; j++) {
+                for (k = str_len; k >= j; k--) str[k + 1] = str[k];
                 str[j] = nstr[j - start];
-                strLen++;
+                str_len++;
                 i++;
             }
         }
