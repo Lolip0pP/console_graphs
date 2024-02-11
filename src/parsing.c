@@ -1,60 +1,64 @@
+#include "parsing.h"
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-struct stack {
-    char c;
-    struct stack *next;
-};
+// struct stack {
+//     char c;
+//     struct stack *next;
+// };
 
-struct stack *push(struct stack *, char);
-char delete_symbol(struct stack **);
-int operation_priority(char);
+// struct stack *push(struct stack *, char);
+// char delete_symbol(struct stack **);
+// int operation_priority(char);
 
-int main() {
-    //'+', '-', '*', '/', '!', '?', ':', ';', '@', '&'
-    struct stack *operators = NULL;
-    char a[80], outstring[80];
+// int main() {
+//'+', '-', '*', '/', '!', '?', ':', ';', '@', '&'
+// struct stack *operators = NULL;
+// char input[80], outstring[80];
+// int i = 0, j = 0;
+void Parsing(char *input, char *outstring) {
     int i = 0, j = 0;
-
-    printf("Запускаем модуль? y/n ");
-    while (getchar() != 'n') {
-        fflush(stdin);
-        scanf("%s", a);
-
-        while (a[i] != '\0' && a[i] != '=') {
-            if (a[i] == ')') {
-                while ((operators->c) != '(') outstring[j++] = delete_symbol(&operators);
-                delete_symbol(&operators);
-            } else if (a[i] == 'x' || (a[i] >= '0' && a[i] <= '9') || a[i] == '.')
-                outstring[j++] = a[i];
-            else if (a[i] == '(')
-                operators = push(operators, '(');
-            else if (a[i] == '+' || a[i] == '-' || a[i] == '/' || a[i] == '*' || a[i] == '!' || a[i] == '?' ||
-                     a[i] == ':' || a[i] == ';' || a[i] == '@' || a[i] == '&') {
-                if (operators == NULL)
-                    operators = push(operators, a[i]);
+    struct stack *operators = NULL;
+    printf("Запускаем модуль? y/n \n");
+    while (input[i] != '\0' && input[i] != '=') {
+        if (input[i] == ')') {
+            while ((operators->c) != '(') outstring[j++] = delete_symbol(&operators);
+            delete_symbol(&operators);
+        } else if (input[i] == 'x' || (input[i] >= '0' && input[i] <= '9') || input[i] == '.')
+            outstring[j++] = input[i];
+        else if (input[i] == '(')
+            operators = push(operators, '(');
+        else if (input[i] == '+' || input[i] == '-' || input[i] == '/' || input[i] == '*' ||
+                 input[i] == '!' || input[i] == '?' || input[i] == ':' || input[i] == ';' ||
+                 input[i] == '@' || input[i] == '&') {
+            if (operators == NULL)
+                operators = push(operators, input[i]);
+            else {
+                if (operation_priority(operators->c) < operation_priority(input[i]))
+                    operators = push(operators, input[i]);
                 else {
-                    if (operation_priority(operators->c) < operation_priority(a[i]))
-                        operators = push(operators, a[i]);
-                    else {
-                        while ((operators != NULL) &&
-                               (operation_priority(operators->c) >= operation_priority(a[i])))
-                            outstring[j++] = delete_symbol(&operators);
-                        operators = push(operators, a[i]);
-                    }
+                    while ((operators != NULL) &&
+                           (operation_priority(operators->c) >= operation_priority(input[i])))
+                        outstring[j++] = delete_symbol(&operators);
+                    operators = push(operators, input[i]);
                 }
             }
-            i++;
         }
-
-        while (operators != NULL) outstring[j++] = delete_symbol(&operators);
-        outstring[j] = '\0';
-        printf("\n%s\n", outstring);
-        fflush(stdin);
-        printf("\nПовтоpить(y/n)? ");
+        i++;
     }
-    return 0;
+
+    while (operators != NULL) outstring[j++] = delete_symbol(&operators);
+    outstring[j] = '\0';
+
+    printf("%s\n", outstring);
+
+    // for (i = 0; i < (int)strlen(outstring); i++) outstring[i] = '\0';
+    // fflush(stdin);
+
+    // return 0;
 }
 
 struct stack *push(struct stack *head, char a) {

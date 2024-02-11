@@ -1,12 +1,12 @@
+#include "str.h"
+
 #include <stdio.h>
 #include <string.h>
 
-char* str_replace(char* hey, int num, const char* str, const char* orig, const char* rep);
-int norm(char* s);
-
-int main() {
-    char buf[128];
-    char s[128];
+// int main() {
+void replace_symol(char* buf, char* s) {
+    // char buf[80];
+    // char s[80];
     printf("Print infix shit:\n");
     scanf("%s", s);
 
@@ -19,10 +19,10 @@ int main() {
     str_replace(s, sizeof(s) - 1, buf, "ln", "&");
     str_replace(buf, sizeof(buf) - 1, s, "(-", "(~");
 
-    printf("%d\n", norm(s));
-    printf("%s", s);
+    // printf("%d\n", norm(s));
+    printf("%s\n", buf);
 
-    return 0;
+    // return 0;
 }
 
 char* str_replace(char* hey, int num, const char* str, const char* orig, const char* rep) {
@@ -30,7 +30,6 @@ char* str_replace(char* hey, int num, const char* str, const char* orig, const c
     size_t len1 = strlen(orig);
     size_t len2 = strlen(rep);
     char* tmp = hey;
-
     num -= 1;
     while ((p = strstr(str, orig)) != NULL) {
         num -= (p - str) + len2;
