@@ -2,13 +2,13 @@
 #define PARSING_H
 
 struct stack {
-    char c;
+    char data;
     struct stack *next;
 };
 
 struct stack *push(struct stack *, char);
 char delete_symbol(struct stack **);
 int operation_priority(char);
-void Parsing(char *input, char *outstring);
+void parsing(char *input, char *outstring);
 
 #endif

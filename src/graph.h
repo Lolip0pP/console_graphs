@@ -3,4 +3,5 @@
 
 void round_array_values(double array[], int size);
 void graph(double *values);
+
 #endif
