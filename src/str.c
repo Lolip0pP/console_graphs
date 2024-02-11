@@ -1,52 +1,56 @@
+#include "str.h"
+
 #include <stdio.h>
 #include <string.h>
 
-char* str_replace(char* hey, int num, const char* str, const char* orig, const char* rep);
-int norm(char* s);
-
-int main() {
-    char buf[128];
-    char s[128];
+void replace_symbol(char* s) {
     printf("Print infix shit:\n");
     scanf("%s", s);
 
     if (s[0] == '-') s[0] = '~';
-    str_replace(buf, sizeof(buf) - 1, s, "cos", "?");
-    str_replace(s, sizeof(s) - 1, buf, "sin", "!");
-    str_replace(buf, sizeof(buf) - 1, s, "tan", ":");
-    str_replace(s, sizeof(s) - 1, buf, "ctg", ";");
-    str_replace(buf, sizeof(buf) - 1, s, "sqrt", "@");
-    str_replace(s, sizeof(s) - 1, buf, "ln", "&");
-    str_replace(buf, sizeof(buf) - 1, s, "(-", "(~");
-
-    printf("%d\n", norm(s));
-    printf("%s", s);
-
-    return 0;
+    str_replace(s, "cos", "?");
+    str_replace(s, "sin", "!");
+    str_replace(s, "tan", ":");
+    str_replace(s, "ctg", ";");
+    str_replace(s, "sqrt", "@");
+    str_replace(s, "ln", "&");
+    str_replace(s, "log", "&");
+    str_replace(s, "(-", "(~");
+    
+    //printf("%d\n", norm(s));
+    printf("%s\n", s);
 }
 
-char* str_replace(char* hey, int num, const char* str, const char* orig, const char* rep) {
-    const char* p;
-    size_t len1 = strlen(orig);
-    size_t len2 = strlen(rep);
-    char* tmp = hey;
+void str_replace(char str[], char sub[], char nstr[]) {
+    int strLen, subLen, nstrLen;
+    int i = 0, j, k;
+    int flag = 0, start, end;
+    strLen = strlen(str);
+    subLen = strlen(sub);
+    nstrLen = strlen(nstr);
 
-    num -= 1;
-    while ((p = strstr(str, orig)) != NULL) {
-        num -= (p - str) + len2;
-        if (num < 1) break;
-        strncpy(hey, str, (size_t)(p - str));
-        hey += p - str;
-        strncpy(hey, rep, len2);
-        hey += len2;
-        str = p + len1;
+    for (i = 0; i < strLen; i++) {
+        flag = 0;
+        start = i;
+        for (j = 0; str[i] == sub[j]; j++, i++)
+            if (j == subLen - 1) flag = 1;
+        end = i;
+        if (flag == 0)
+            i -= j;
+        else {
+            for (j = start; j < end; j++) {
+                for (k = start; k < strLen; k++) str[k] = str[k + 1];
+                strLen--;
+                i--;
+            }
+            for (j = start; j < start + nstrLen; j++) {
+                for (k = strLen; k >= j; k--) str[k + 1] = str[k];
+                str[j] = nstr[j - start];
+                strLen++;
+                i++;
+            }
+        }
     }
-
-    for (; (*hey = *str) && (num > 0); --num) {
-        hey++;
-        str++;
-    }
-    return tmp;
 }
 
 int norm(char* s) {
