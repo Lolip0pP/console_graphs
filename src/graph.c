@@ -10,10 +10,10 @@ void round_array_values(float array[], int size);
 
 int main() {
     float values[80];
-    for(int i = 0; i<80; i++) {
-        values[i] = -1+i*PI/20;
+    for (int i = 0; i < 80; i++) {
+        values[i] = -1 + i * PI / 20;
     }
-    
+
     int size = sizeof(values) / sizeof(values[0]);
     round_array_values(values, size);
 

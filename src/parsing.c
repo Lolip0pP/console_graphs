@@ -1,6 +1,6 @@
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct stack {
     char c;
@@ -17,43 +17,42 @@ int main() {
     char a[80], outstring[80];
     int i = 0, j = 0;
 
-    printf("Запускаем модуль? y/n ");
-    while (getchar() != 'n') {
-        fflush(stdin);
-        scanf("%s", a);
+    scanf("%s", a);
 
-        while (a[i] != '\0' && a[i] != '=') {
-            if (a[i] == ')') {
-                while ((operators->c) != '(') outstring[j++] = delete_symbol(&operators);
-                delete_symbol(&operators);
-            } else if (a[i] == 'x' || (a[i] >= '0' && a[i] <= '9') || a[i] == '.')
-                outstring[j++] = a[i];
-            else if (a[i] == '(')
-                operators = push(operators, '(');
-            else if (a[i] == '+' || a[i] == '-' || a[i] == '/' || a[i] == '*' || a[i] == '!' || a[i] == '?' ||
-                     a[i] == ':' || a[i] == ';' || a[i] == '@' || a[i] == '&') {
-                if (operators == NULL)
+    while (a[i] != '\0' && a[i] != '=') {
+        if (a[i] == ')') {
+            while ((operators->c) != '(') outstring[j++] = delete_symbol(&operators);
+            delete_symbol(&operators);
+        } else if (a[i] == 'x' || (a[i] >= '0' && a[i] <= '9') || a[i] == '.')
+            outstring[j++] = a[i];
+        else if (a[i] == '(')
+            operators = push(operators, '(');
+        else if (a[i] == '+' || a[i] == '-' || a[i] == '/' || a[i] == '*' || a[i] == '!' || a[i] == '?' ||
+                 a[i] == ':' || a[i] == ';' || a[i] == '@' || a[i] == '&') {
+            if (operators == NULL)
+                operators = push(operators, a[i]);
+            else {
+                if (operation_priority(operators->c) < operation_priority(a[i]))
                     operators = push(operators, a[i]);
                 else {
-                    if (operation_priority(operators->c) < operation_priority(a[i]))
-                        operators = push(operators, a[i]);
-                    else {
-                        while ((operators != NULL) &&
-                               (operation_priority(operators->c) >= operation_priority(a[i])))
-                            outstring[j++] = delete_symbol(&operators);
-                        operators = push(operators, a[i]);
-                    }
+                    while ((operators != NULL) &&
+                           (operation_priority(operators->c) >= operation_priority(a[i])))
+                        outstring[j++] = delete_symbol(&operators);
+                    operators = push(operators, a[i]);
                 }
             }
-            i++;
         }
-
-        while (operators != NULL) outstring[j++] = delete_symbol(&operators);
-        outstring[j] = '\0';
-        printf("\n%s\n", outstring);
-        fflush(stdin);
-        printf("\nПовтоpить(y/n)? ");
+        i++;
     }
+
+    while (operators != NULL) outstring[j++] = delete_symbol(&operators);
+    outstring[j] = '\0';
+
+    printf("%s\n", outstring);
+
+    for (i = 0; i < (int)strlen(outstring); i++) outstring[i] = '\0';
+    fflush(stdin);
+
     return 0;
 }
 
